@@ -1,4 +1,3 @@
-# Shimla-jana-hai-ki-nei...Shimla-me-decide-karte-hai-
 <!DOCTYPE html>
 <html lang="en">
 <head>
