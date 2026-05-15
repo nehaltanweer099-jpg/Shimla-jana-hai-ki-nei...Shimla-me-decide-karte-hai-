@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pahadon Mein Simran? 🚂</title>
+    <style>
+        :root {
+            --bg1: #0f0c29; --bg2: #302b63; --accent: #a29bfe;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: white; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.8s ease;
+        }
+
+        #main-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px; border-radius: 30px;
+            width: 85%; max-width: 400px;
+            text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .choice-btn {
+            display: block; width: 100%; padding: 12px; margin: 8px 0;
+            border: none; border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white; font-size: 15px; cursor: pointer;
+            transition: 0.3s; border: 1px solid transparent;
+        }
+
+        #no-btn { color: #ff7675; border-color: rgba(255, 118, 117, 0.3); }
+
+        #final-tab {
+            margin-top: 25px; padding-top: 20px;
+            border-top: 1px dashed rgba(255,255,255,0.3);
+        }
+
+        .num-row { display: flex; justify-content: space-between; margin-top: 15px; }
+
+        .num-btn {
+            width: 45px; height: 45px; border-radius: 50%;
+            border: 2px solid var(--accent); background: transparent;
+            color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .num-btn:hover { background: var(--accent); transform: scale(1.1); }
+
+        #final-page {
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 20px;
+        }
+
+        .snow { position: absolute; top: -20px; animation: fall linear infinite; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<audio id="happy-audio" loop preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+<audio id="sad-audio" preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+</audio>
+<audio id="success-audio" preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
+
+<div id="main-card">
+    <div id="icon-box" style="font-size: 60px; margin-bottom: 10px;">🏔️</div>
+    <h2 id="heading">Next week 🏔️ jabi ki jabinaa??😒</h2>
+    
+    <div id="options-container">
+        <button class="choice-btn" onclick="changeTheme(1)">1. Haa ekdom jabo🦋</button>
+        <button class="choice-btn" onclick="changeTheme(2)">2. Tui eshe maniyee niyee jaa 😤</button>
+        <button id="no-btn" class="choice-btn" onmouseover="dodge()" onclick="dodge()">3. Naa ekdom jabonaaa.... 🤫</button>
+        <button class="choice-btn" onclick="changeTheme(4)">4. Tui ekla jaa, den r firish naa🙂</button>
+    </div>
+
+    <div id="status-text" style="margin-top:15px; min-height:40px; font-style:italic; font-size:14px; color: var(--accent);">
+        Select an option to see the vibe...
+    </div>
+
+    <div id="final-tab">
+        <p style="font-size: 13px; opacity: 0.8;">Final option select kor after checking all the options</p>
+        <div class="num-row">
+            <button class="num-btn" onclick="confirmTrip(1)">1</button>
+            <button class="num-btn" onclick="confirmTrip(2)">2</button>
+            <button class="num-btn" onclick="confirmTrip(3)">3</button>
+            <button class="num-btn" onclick="confirmTrip(4)">4</button>
+        </div>
+    </div>
+</div>
+
+<div id="final-page">
+    <h1 style="font-size: 26px; line-height: 1.4;">What you selected doesn't matter,<br>You are going to Shimla with me next week.</h1>
+    <h2 style="color: #a29bfe; margin-top: 20px;">Its destiny 🌌</h2>
+    <div style="font-size: 80px; margin: 30px;">🏔️✨🚗</div>
+    <p style="opacity: 0.7;">Pack tor baba korbe? Ready hoye thak! 🎒</p>
+</div>
+
+<script>
+    const happySound = document.getElementById('happy-audio');
+    const sadSound = document.getElementById('sad-audio');
+    const successSound = document.getElementById('success-audio');
+
+    function stopAllMusic() {
+        [happySound, sadSound, successSound].forEach(s => {
+            s.pause();
+            s.currentTime = 0;
+        });
+    }
+
+    function changeTheme(opt) {
+        const body = document.body;
+        const status = document.getElementById('status-text');
+        const icon = document.getElementById('icon-box');
+        stopAllMusic();
+
+        if(opt === 1) {
+            body.style.background = "linear-gradient(135deg, #00b09b, #96c93d)";
+            status.innerHTML = "Legendary arms-wide pose activated! 🕺✨";
+            icon.innerHTML = "🕺";
+            happySound.play();
+        } else if(opt === 2) {
+            body.style.background = "linear-gradient(135deg, #4facfe, #00f2fe)";
+            status.innerHTML = "DDLJ train scene sequence starting... 🚂💨";
+            icon.innerHTML = "🚂";
+            happySound.play();
+        } else if(opt === 4) {
+            body.style.background = "linear-gradient(135deg, #2c3e50, #4ca1af)";
+            status.innerHTML = "Emotional damage... 🎻 Sad music playing.";
+            icon.innerHTML = "🥺";
+            sadSound.play();
+        }
+    }
+
+    function dodge() {
+        const btn = document.getElementById('no-btn');
+        const x = Math.random() * (window.innerWidth - 150);
+        const y = Math.random() * (window.innerHeight - 50);
+        btn.style.position = 'fixed';
+        btn.style.left = x + 'px';
+        btn.style.top = y + 'px';
+        document.getElementById('status-text').innerHTML = "Error 404: Answer Not Found! 😂";
+    }
+
+    function confirmTrip(n) {
+        if(n === 3) {
+            alert("Wrong choice! Selecting '3' is restricted by Destiny. 😜");
+            return;
+        }
+        stopAllMusic();
+        successSound.play();
+        
+        document.getElementById('main-card').style.display = 'none';
+        const final = document.getElementById('final-page');
+        final.style.display = 'flex';
+
+        for(let i=0; i<80; i++) {
+            let snow = document.createElement('div');
+            snow.className = 'snow';
+            snow.innerHTML = i % 2 === 0 ? '❄️' : '✨';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.fontSize = (Math.random() * 15 + 5) + 'px';
+            snow.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            snow.style.opacity = Math.random();
+            final.appendChild(snow);
+        }
+    }
+</script>
+
+</body>
+</html>
